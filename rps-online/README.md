@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 RPS Online - Blockchain Beef Settler
 
-## Getting Started
+An arcade-style Rock-Paper-Scissors game built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
 
-First, run the development server:
+## 🚀 Features
 
+- **Arcade-Style UI**: Neon colors, glowing borders, and retro animations
+- **Game Flow**: Commit → Reveal → Result phases
+- **Leaderboard**: Track player scores with arcade-style rankings
+- **Beef Log**: Scrollable history of all matches
+- **Animations**: Flashy hand reveals and victory celebrations
+- **Sound Ready**: Placeholder integration for Howler.js sound effects
+
+## 🛠️ Tech Stack
+
+- **Next.js 15** with App Router
+- **TypeScript** for type safety
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations
+- **Howler.js** (ready for sound integration)
+
+## 🎯 Getting Started
+
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎮 How to Play
 
-## Learn More
+1. **Commit Phase**: Both players secretly choose Rock, Paper, or Scissors
+2. **Reveal Phase**: Watch the flashy hand animations reveal the choices
+3. **Result Phase**: See who wins with victory celebrations
+4. **Repeat**: Start the next round and climb the leaderboard!
 
-To learn more about Next.js, take a look at the following resources:
+## 🔮 Web3 Integration Ready
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is structured to easily add:
+- Smart contracts for on-chain game logic
+- NFT rewards for win streaks
+- Cryptocurrency wagering
+- Decentralized leaderboards
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── GameBoard.tsx      # Main game controller
+│   ├── CommitPhase.tsx    # Secret choice selection
+│   ├── RevealPhase.tsx    # Animated reveal
+│   ├── ResultPhase.tsx    # Victory/defeat display
+│   ├── Leaderboard.tsx    # Player rankings
+│   └── BeefLog.tsx        # Match history
+└── lib/
+    ├── types.ts           # TypeScript definitions
+    └── gameLogic.ts       # Game rules and utilities
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🎨 Styling
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The game features a full arcade aesthetic with:
+- Neon gradient backgrounds
+- Glowing borders and shadows
+- Retro color schemes (cyan, purple, pink, yellow)
+- Custom scrollbars
+- Smooth animations and transitions
+
+## 🔊 Sound Integration
+
+Ready for Howler.js integration with placeholder sound effects for:
+- Victory fanfare
+- Defeat sounds
+- Draw notifications
+- Button clicks and interactions
+
+---
+
+Built for hackathons and ready for Web3! 🚀
