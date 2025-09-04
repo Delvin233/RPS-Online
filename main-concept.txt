@@ -1,0 +1,43 @@
+🎮 Rock–Paper–Scissors: Blockchain Beef Settler
+🔥 The Concept
+A fast, arcade-style Rock–Paper–Scissors game on the blockchain where players can:
+- Settle beefs → Prove victories transparently with results stored on-chain.
+- Climb the ranks → Compete in a ranked mode with ELO-style scoring.
+- Earn NFT rewards → Winning streaks mint collectible NFTs with rarity scaling by streak length.
+- Have fun → Flashy visuals, sounds, and a leaderboard that feels like an arcade machine.
+🕹️ Gameplay Flow
+1. Challenge
+   - Player creates a match (or joins one).
+   - They “commit” their move (rock/paper/scissors) secretly using commit–reveal.
+2. Reveal
+   - Both players reveal their moves.
+   - Flashy animations (hands slamming down ✊ ✋ ✌️).
+   - Sound effects: drumroll → victory cheer or sad trombone.
+3. Result
+   - Winner gets +1 score.
+   - Result saved to the public beef log (anyone can view the history).
+4. Ranking & Rewards
+   - ELO ranking for competitive play.
+   - Win streaks = NFT rewards (e.g.
+     - 3 wins → Common Badge
+     - 10 wins → Rare Trophy
+     - 25 wins → Legendary Crown).
+📊 Features
+- Arcade-style frontend → Animated hands, neon scoreboard, retro sounds.
+- Beef Log → On-chain history of matches, transparent & permanent.
+- Ranked Leaderboard → Seasonal resets keep competition alive.
+- NFT Rewards → Unique streak collectibles, tradable on marketplaces.
+⚙️ Tech Stack
+- Smart Contracts: Solidity + Hardhat (commit–reveal RPS, leaderboard, NFT minting).
+- Frontend: React + Tailwind + Framer Motion (animations) + Howler.js (sounds).
+- Blockchain: Ethereum testnet / Polygon (cheap gas for hackathon).
+- Wallet Integration: MetaMask via Wagmi/RainbowKit.
+🚀 Hackathon MVP (3 Days)
+- Day 1: Smart contract (commit–reveal, beef log, streak tracker, NFT basics).
+- Day 2: Frontend MVP (wallet login, play a match, see beef log).
+- Day 3: Add visuals (animations, sounds), polish leaderboard, demo script.
+🎯 Why It Stands Out
+- Most hackathon dApps are flat + boring.
+- This one is a game with sounds, animations, and social rivalry.
+- The blockchain twist (beef log + NFTs) makes it a true Web3 project.
+- Fun, memorable, and demo-friendly — judges can literally “settle beefs” live.
