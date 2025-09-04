@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Choice } from '@/lib/types';
 import { getChoiceEmoji } from '@/lib/gameLogic';
+import { soundManager } from '@/lib/soundManager';
 
 interface CommitPhaseProps {
   onPlayer1Choice: (choice: Choice) => void;
@@ -29,46 +30,60 @@ export default function CommitPhase({
     disabled: boolean; 
   }) => (
     <motion.button
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={!disabled ? { 
+        scale: 1.1,
+        y: -5
+      } : {}}
+      whileTap={!disabled ? { scale: 0.95 } : {}}
       onClick={onClick}
       disabled={disabled}
       className={`
-        p-6 rounded-xl text-4xl font-bold border-2 transition-all
+        relative p-8 rounded-2xl text-5xl transition-all duration-300
         ${disabled 
-          ? 'bg-gray-600 border-gray-500 cursor-not-allowed opacity-50' 
-          : 'bg-gradient-to-br from-purple-600 to-pink-600 border-cyan-400 hover:border-yellow-400 hover:shadow-lg hover:shadow-cyan-400/50'
+          ? 'bg-gray-900 border-4 border-gray-600 cursor-not-allowed opacity-50' 
+          : 'arcade-button hover:arcade-button'
         }
       `}
     >
-      {getChoiceEmoji(choice)}
+      <div className="relative z-10">{getChoiceEmoji(choice)}</div>
+      {!disabled && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent rounded-2xl"
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+        />
+      )}
     </motion.button>
   );
 
   return (
-    <div className="flex flex-col items-center space-y-8">
+    <div className="flex flex-col items-center space-y-8 p-4">
       <motion.h2 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
+        className="arcade-font text-2xl md:text-3xl text-primary text-center"
       >
         🎮 COMMIT YOUR MOVES! 🎮
       </motion.h2>
 
-      <div className="grid grid-cols-2 gap-12 w-full max-w-4xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full max-w-6xl">
         {/* Player 1 */}
-        <div className="flex flex-col items-center space-y-4">
-          <h3 className="text-2xl font-bold text-yellow-400">Player 1</h3>
-          <div className={`
-            p-4 rounded-lg border-2 transition-all
-            ${player1Ready 
-              ? 'border-green-400 bg-green-900/30 shadow-lg shadow-green-400/30' 
-              : 'border-red-400 bg-red-900/30'
-            }
-          `}>
-            {player1Ready ? '✅ READY!' : '⏳ Waiting...'}
-          </div>
-          <div className="grid grid-cols-3 gap-4">
+        <div className="flex flex-col items-center space-y-6">
+          <h3 className="arcade-font text-lg text-primary">PLAYER 1</h3>
+          <motion.div 
+            animate={player1Ready ? { scale: 1.02 } : { scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className={`
+              px-6 py-3 rounded-lg border-2 transition-all arcade-font text-sm
+              ${player1Ready 
+                ? 'border-green-500 bg-green-900/20 text-success' 
+                : 'border-red-500 bg-red-900/20 text-red-400'
+              }
+            `}
+          >
+            {player1Ready ? '✅ READY!' : '⏳ WAITING...'}
+          </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-md">
             {choices.map((choice) => (
               <ChoiceButton
                 key={`p1-${choice}`}
@@ -81,18 +96,22 @@ export default function CommitPhase({
         </div>
 
         {/* Player 2 */}
-        <div className="flex flex-col items-center space-y-4">
-          <h3 className="text-2xl font-bold text-cyan-400">Player 2</h3>
-          <div className={`
-            p-4 rounded-lg border-2 transition-all
-            ${player2Ready 
-              ? 'border-green-400 bg-green-900/30 shadow-lg shadow-green-400/30' 
-              : 'border-red-400 bg-red-900/30'
-            }
-          `}>
-            {player2Ready ? '✅ READY!' : '⏳ Waiting...'}
-          </div>
-          <div className="grid grid-cols-3 gap-4">
+        <div className="flex flex-col items-center space-y-6">
+          <h3 className="arcade-font text-lg text-accent">PLAYER 2</h3>
+          <motion.div 
+            animate={player2Ready ? { scale: 1.02 } : { scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className={`
+              px-6 py-3 rounded-lg border-2 transition-all arcade-font text-sm
+              ${player2Ready 
+                ? 'border-green-500 bg-green-900/20 text-success' 
+                : 'border-red-500 bg-red-900/20 text-red-400'
+              }
+            `}
+          >
+            {player2Ready ? '✅ READY!' : '⏳ WAITING...'}
+          </motion.div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-md">
             {choices.map((choice) => (
               <ChoiceButton
                 key={`p2-${choice}`}
