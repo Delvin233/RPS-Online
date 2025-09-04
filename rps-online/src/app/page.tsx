@@ -27,20 +27,20 @@ export default function Home() {
           className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm max-w-2xl mx-auto mb-16"
         >
           <h2 className="arcade-font text-2xl text-cyan-400 mb-6 text-center">
-            🎯 Game Rules
+            Game Rules
           </h2>
           <ul className="space-y-3 text-gray-300 text-lg">
             <li>
-              🪨 <strong>Rock</strong> crushes Scissors
+              <strong>Rock</strong> crushes Scissors
             </li>
             <li>
-              📄 <strong>Paper</strong> covers Rock
+              <strong>Paper</strong> covers Rock
             </li>
             <li>
-              ✂️ <strong>Scissors</strong> cuts Paper
+              <strong>Scissors</strong> cuts Paper
             </li>
             <li>
-              🤝 Same choice = <strong>Draw</strong>
+              Same choice = <strong>Draw</strong>
             </li>
           </ul>
         </motion.div>
@@ -57,7 +57,7 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               className="arcade-font px-12 py-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-lg border-2 border-blue-400 transition-all text-2xl"
             >
-              🎮 START PLAYING
+              START PLAYING
             </motion.button>
           </Link>
         </motion.div>
