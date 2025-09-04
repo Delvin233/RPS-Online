@@ -6,7 +6,11 @@ import { Choice } from '@/lib/types';
 import { OnlineMatch } from '@/lib/matchStore';
 import { getChoiceEmoji } from '@/lib/gameLogic';
 
-export default function OnlineGame() {
+interface OnlineGameProps {
+  initialMatchId?: string;
+}
+
+export default function OnlineGame({ initialMatchId }: OnlineGameProps) {
   const [playerId] = useState(() => {
     if (typeof window === 'undefined') return 'temp-id';
     const stored = localStorage.getItem('rps-playerId');
@@ -21,16 +25,20 @@ export default function OnlineGame() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const restoreMatch = async () => {
+    const loadMatch = async () => {
       if (typeof window === 'undefined') return;
-      const storedMatchId = localStorage.getItem('rps-currentMatch');
-      if (storedMatchId) {
+      
+      // Use initialMatchId if provided, otherwise check localStorage
+      const targetMatchId = initialMatchId || localStorage.getItem('rps-currentMatch');
+      
+      if (targetMatchId) {
         try {
-          const response = await fetch(`/api/matches/${storedMatchId}`);
+          const response = await fetch(`/api/matches/${targetMatchId}`);
           const data = await response.json();
           if (data.match && data.match.status !== 'completed') {
             setMatch(data.match);
-            setMatchId(storedMatchId);
+            setMatchId(targetMatchId);
+            localStorage.setItem('rps-currentMatch', targetMatchId);
           } else {
             localStorage.removeItem('rps-currentMatch');
           }
@@ -39,8 +47,8 @@ export default function OnlineGame() {
         }
       }
     };
-    restoreMatch();
-  }, []);
+    loadMatch();
+  }, [initialMatchId]);
 
   const createMatch = async () => {
     setLoading(true);

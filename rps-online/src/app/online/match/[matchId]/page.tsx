@@ -2,10 +2,13 @@
 
 import { useAccount } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useParams } from 'next/navigation';
 import OnlineGame from '@/components/OnlineGame';
 
 export default function MatchPage() {
   const { isConnected } = useAccount();
+  const params = useParams();
+  const matchId = params.matchId as string;
 
   if (!isConnected) {
     return (
@@ -26,7 +29,7 @@ export default function MatchPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/5 via-purple-900/5 to-pink-900/5" />
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
           <div className="relative z-10">
-            <OnlineGame />
+            <OnlineGame initialMatchId={matchId} />
           </div>
         </div>
       </div>
