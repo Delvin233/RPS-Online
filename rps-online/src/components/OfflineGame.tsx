@@ -72,9 +72,11 @@ export default function OfflineGame() {
       const newMatches = [...prev.matches, match];
       
       // Save offline matches to localStorage
-      const offlineMatches = JSON.parse(localStorage.getItem('offline-matches') || '[]');
-      const matchWithMode = { ...match, mode: 'offline' };
-      localStorage.setItem('offline-matches', JSON.stringify([...offlineMatches, matchWithMode]));
+      if (typeof window !== 'undefined') {
+        const offlineMatches = JSON.parse(localStorage.getItem('offline-matches') || '[]');
+        const matchWithMode = { ...match, mode: 'offline' };
+        localStorage.setItem('offline-matches', JSON.stringify([...offlineMatches, matchWithMode]));
+      }
       
       return {
         ...prev,

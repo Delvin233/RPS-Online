@@ -17,7 +17,9 @@ export default function MatchesPage() {
     const fetchMatches = async () => {
       try {
         // Get offline matches from localStorage
-        const offlineMatches: MatchWithMode[] = JSON.parse(localStorage.getItem('offline-matches') || '[]');
+        const offlineMatches: MatchWithMode[] = typeof window !== 'undefined' 
+          ? JSON.parse(localStorage.getItem('offline-matches') || '[]')
+          : [];
         
         // Get online matches from API
         const response = await fetch('/api/matches/completed');

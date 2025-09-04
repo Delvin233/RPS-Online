@@ -8,14 +8,11 @@ import { getChoiceEmoji } from '@/lib/gameLogic';
 
 export default function OnlineGame() {
   const [playerId] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('rps-playerId');
-      if (stored) return stored;
-    }
+    if (typeof window === 'undefined') return 'temp-id';
+    const stored = localStorage.getItem('rps-playerId');
+    if (stored) return stored;
     const id = Math.random().toString(36).substring(2, 10);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('rps-playerId', id);
-    }
+    localStorage.setItem('rps-playerId', id);
     return id;
   });
   const [match, setMatch] = useState<OnlineMatch | null>(null);
@@ -58,7 +55,9 @@ export default function OnlineGame() {
       if (data.match) {
         setMatch(data.match);
         setMatchId(data.match.matchId);
-        localStorage.setItem('rps-currentMatch', data.match.matchId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('rps-currentMatch', data.match.matchId);
+        }
       } else {
         setError(data.error || 'Failed to create match');
       }
@@ -81,7 +80,9 @@ export default function OnlineGame() {
       const data = await response.json();
       if (data.match) {
         setMatch(data.match);
-        localStorage.setItem('rps-currentMatch', data.match.matchId);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('rps-currentMatch', data.match.matchId);
+        }
       } else {
         setError(data.error || 'Failed to join match');
       }
@@ -136,7 +137,9 @@ export default function OnlineGame() {
       setMatch(null);
       setMatchId('');
       setError('');
-      localStorage.removeItem('rps-currentMatch');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('rps-currentMatch');
+      }
     } catch {
       setError('Failed to cancel match');
     }
@@ -343,7 +346,9 @@ export default function OnlineGame() {
             setMatch(null);
             setMatchId('');
             setError('');
-            localStorage.removeItem('rps-currentMatch');
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('rps-currentMatch');
+            }
           }}
           className="arcade-font px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg border-2 border-blue-400"
         >
