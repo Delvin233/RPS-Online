@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Choice } from '@/lib/types';
 import { OnlineMatch } from '@/lib/matchStore';
@@ -142,7 +142,7 @@ export default function OnlineGame() {
     }
   };
 
-  const pollMatch = async () => {
+  const pollMatch = useCallback(async () => {
     if (!match) return;
     try {
       const response = await fetch(`/api/matches/${match.matchId}`);
@@ -153,7 +153,7 @@ export default function OnlineGame() {
     } catch {
       // Silent fail for polling
     }
-  };
+  }, [match]);
 
   useEffect(() => {
     if (match && match.status !== 'completed') {
