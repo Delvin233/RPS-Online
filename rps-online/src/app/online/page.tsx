@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useAccount } from 'wagmi';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { motion } from 'framer-motion';
-import OnlineGame from '@/components/OnlineGame';
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { motion } from "framer-motion";
+import OnlineGame from "@/components/OnlineGame";
 
 export default function OnlinePage() {
   const { isConnected } = useAccount();
@@ -12,14 +12,7 @@ export default function OnlinePage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
         <div className="text-center space-y-8">
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="arcade-font text-4xl text-primary"
-          >
-            🌐 ONLINE MODE 🌐
-          </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
