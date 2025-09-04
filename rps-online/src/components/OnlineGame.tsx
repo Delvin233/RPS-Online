@@ -7,11 +7,43 @@ import { OnlineMatch } from '@/lib/matchStore';
 import { getChoiceEmoji } from '@/lib/gameLogic';
 
 export default function OnlineGame() {
-  const [playerId] = useState(() => Math.random().toString(36).substring(2, 10));
+  const [playerId] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('rps-playerId');
+      if (stored) return stored;
+    }
+    const id = Math.random().toString(36).substring(2, 10);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('rps-playerId', id);
+    }
+    return id;
+  });
   const [match, setMatch] = useState<OnlineMatch | null>(null);
   const [matchId, setMatchId] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const restoreMatch = async () => {
+      if (typeof window === 'undefined') return;
+      const storedMatchId = localStorage.getItem('rps-currentMatch');
+      if (storedMatchId) {
+        try {
+          const response = await fetch(`/api/matches/${storedMatchId}`);
+          const data = await response.json();
+          if (data.match && data.match.status !== 'completed') {
+            setMatch(data.match);
+            setMatchId(storedMatchId);
+          } else {
+            localStorage.removeItem('rps-currentMatch');
+          }
+        } catch {
+          localStorage.removeItem('rps-currentMatch');
+        }
+      }
+    };
+    restoreMatch();
+  }, []);
 
   const createMatch = async () => {
     setLoading(true);
@@ -26,6 +58,7 @@ export default function OnlineGame() {
       if (data.match) {
         setMatch(data.match);
         setMatchId(data.match.matchId);
+        localStorage.setItem('rps-currentMatch', data.match.matchId);
       } else {
         setError(data.error || 'Failed to create match');
       }
@@ -48,6 +81,7 @@ export default function OnlineGame() {
       const data = await response.json();
       if (data.match) {
         setMatch(data.match);
+        localStorage.setItem('rps-currentMatch', data.match.matchId);
       } else {
         setError(data.error || 'Failed to join match');
       }
@@ -88,6 +122,23 @@ export default function OnlineGame() {
       }
     } catch {
       setError('Failed to reveal move');
+    }
+  };
+
+  const cancelMatch = async () => {
+    if (!match) return;
+    try {
+      await fetch('/api/matches/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ matchId: match.matchId, playerId })
+      });
+      setMatch(null);
+      setMatchId('');
+      setError('');
+      localStorage.removeItem('rps-currentMatch');
+    } catch {
+      setError('Failed to cancel match');
     }
   };
 
@@ -186,6 +237,15 @@ export default function OnlineGame() {
         >
           ⏳
         </motion.div>
+        
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={cancelMatch}
+          className="arcade-font px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg border-2 border-red-400 transition-all"
+        >
+          ❌ CANCEL MATCH
+        </motion.button>
       </div>
     );
   }
@@ -283,6 +343,7 @@ export default function OnlineGame() {
             setMatch(null);
             setMatchId('');
             setError('');
+            localStorage.removeItem('rps-currentMatch');
           }}
           className="arcade-font px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg border-2 border-blue-400"
         >

@@ -124,6 +124,10 @@ class MatchStore {
   async getCompletedMatches(): Promise<OnlineMatch[]> {
     return await db.getCompletedMatches();
   }
+
+  async deleteMatch(matchId: string): Promise<void> {
+    await db.deleteMatch(matchId);
+  }
 }
 
 export const matchStore = new MatchStore();

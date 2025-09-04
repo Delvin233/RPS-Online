@@ -29,5 +29,9 @@ export const db = {
     return Array.from(globalMatches.values())
       .filter(match => match.status === 'completed')
       .sort((a, b) => (b.completedAt?.getTime() || 0) - (a.completedAt?.getTime() || 0));
+  },
+
+  async deleteMatch(matchId: string): Promise<void> {
+    globalMatches.delete(matchId);
   }
 };
