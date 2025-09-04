@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { GameState, Choice, Player, Match } from '@/lib/types';
+import { GameState, Choice, Match } from '@/lib/types';
 import { determineWinner, generateMatchId } from '@/lib/gameLogic';
 import CommitPhase from './CommitPhase';
 import RevealPhase from './RevealPhase';

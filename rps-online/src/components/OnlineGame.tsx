@@ -29,7 +29,7 @@ export default function OnlineGame() {
       } else {
         setError(data.error || 'Failed to create match');
       }
-    } catch (err) {
+    } catch {
       setError('Network error');
     }
     setLoading(false);
@@ -51,7 +51,7 @@ export default function OnlineGame() {
       } else {
         setError(data.error || 'Failed to join match');
       }
-    } catch (err) {
+    } catch {
       setError('Network error');
     }
     setLoading(false);
@@ -69,7 +69,7 @@ export default function OnlineGame() {
       if (data.match) {
         setMatch(data.match);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to commit move');
     }
   };
@@ -86,7 +86,7 @@ export default function OnlineGame() {
       if (data.match) {
         setMatch(data.match);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to reveal move');
     }
   };
@@ -99,7 +99,7 @@ export default function OnlineGame() {
       if (data.match) {
         setMatch(data.match);
       }
-    } catch (err) {
+    } catch {
       // Silent fail for polling
     }
   };
@@ -109,7 +109,7 @@ export default function OnlineGame() {
       const interval = setInterval(pollMatch, 2000);
       return () => clearInterval(interval);
     }
-  }, [match]);
+  }, [match, pollMatch]);
 
   const isPlayer1 = match?.player1Id === playerId;
   const playerChoice = isPlayer1 ? match?.player1Choice : match?.player2Choice;

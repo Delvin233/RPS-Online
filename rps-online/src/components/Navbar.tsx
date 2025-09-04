@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import SoundToggle from './SoundToggle';
+
 
 export default function Navbar() {
   const pathname = usePathname();

@@ -1,7 +1,7 @@
 'use client';
 
 class SoundManager {
-  private sounds: { [key: string]: any } = {};
+  private sounds: { [key: string]: { play: () => void } } = {};
   private muted = false;
 
   constructor() {

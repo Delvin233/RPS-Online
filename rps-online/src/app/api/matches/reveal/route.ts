@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ match });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to reveal move' }, { status: 500 });
   }
 }

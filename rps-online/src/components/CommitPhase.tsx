@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Choice } from '@/lib/types';
 import { getChoiceEmoji } from '@/lib/gameLogic';
-import { soundManager } from '@/lib/soundManager';
+
 
 interface CommitPhaseProps {
   onPlayer1Choice: (choice: Choice) => void;
