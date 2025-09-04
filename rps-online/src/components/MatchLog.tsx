@@ -26,7 +26,7 @@ export default function MatchLog({ matches }: MatchLogProps) {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,7 +40,8 @@ export default function MatchLog({ matches }: MatchLogProps) {
           📜 MATCH LOG 📜
         </motion.h2>
 
-        <div className="overflow-y-auto h-72 space-y-3 scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-gray-800">
+        <div className="overflow-y-auto h-72 scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {matches.length === 0 ? (
             <div className="text-center text-gray-400 py-8">
               <p className="text-xl">🎮 No matches yet!</p>
@@ -89,6 +90,7 @@ export default function MatchLog({ matches }: MatchLogProps) {
               </motion.div>
             ))
           )}
+          </div>
         </div>
 
         {matches.length > 0 && (
