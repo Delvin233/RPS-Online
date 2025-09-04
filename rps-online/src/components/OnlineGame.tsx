@@ -102,17 +102,23 @@ export default function OnlineGame({ initialMatchId }: OnlineGameProps) {
 
   const commitMove = async (choice: Choice) => {
     if (!match) return;
+    setError('');
     try {
+      console.log('Committing move:', { matchId: match.matchId, playerId, choice });
       const response = await fetch('/api/matches/commit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ matchId: match.matchId, playerId, choice })
       });
       const data = await response.json();
+      console.log('Commit response:', data);
       if (data.match) {
         setMatch(data.match);
+      } else {
+        setError(data.error || 'Failed to commit move');
       }
-    } catch {
+    } catch (error) {
+      console.error('Commit error:', error);
       setError('Failed to commit move');
     }
   };
@@ -306,8 +312,12 @@ export default function OnlineGame({ initialMatchId }: OnlineGameProps) {
             onClick={revealMove}
             className="arcade-font px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg border-2 border-blue-400"
           >
-            🎯 REVEAL MOVES 🎯
+            REVEAL MOVES
           </motion.button>
+        )}
+
+        {error && (
+          <div className="text-red-400 arcade-font text-center">{error}</div>
         )}
       </div>
     );
