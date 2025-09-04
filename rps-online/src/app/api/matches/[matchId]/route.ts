@@ -6,6 +6,8 @@ export async function GET(
   { params }: { params: Promise<{ matchId: string }> }
 ) {
   try {
+    await matchStore.cleanupExpiredMatches();
+    
     const { matchId } = await params;
     
     console.log('Get match request:', matchId);

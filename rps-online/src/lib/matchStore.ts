@@ -128,6 +128,19 @@ class MatchStore {
   async deleteMatch(matchId: string): Promise<void> {
     await db.deleteMatch(matchId);
   }
+
+  async cleanupExpiredMatches(): Promise<void> {
+    const matches = await db.getAllMatches();
+    const now = new Date();
+    const twentyMinutes = 20 * 60 * 1000;
+    
+    for (const match of matches) {
+      const matchAge = now.getTime() - match.createdAt.getTime();
+      if (matchAge > twentyMinutes && match.status !== 'completed') {
+        await db.deleteMatch(match.matchId);
+      }
+    }
+  }
 }
 
 export const matchStore = new MatchStore();

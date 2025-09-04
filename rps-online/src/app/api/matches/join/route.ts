@@ -3,6 +3,8 @@ import { matchStore } from '@/lib/matchStore';
 
 export async function POST(request: NextRequest) {
   try {
+    await matchStore.cleanupExpiredMatches();
+    
     const { matchId, playerId } = await request.json();
     
     console.log('Join match request:', { matchId, playerId });
