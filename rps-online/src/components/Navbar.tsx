@@ -27,7 +27,7 @@ export default function Navbar() {
     <nav className="bg-gray-900 border-b-2 border-blue-600 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/offline" className="arcade-font text-xl text-primary hover:text-accent transition-colors">
+          <Link href="/" className="arcade-font text-xl text-primary hover:text-accent transition-colors">
             🎮 RPS ONLINE
           </Link>
           
