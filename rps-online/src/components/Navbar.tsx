@@ -15,13 +15,12 @@ export default function Navbar() {
   const displayName = ensName || (address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '');
 
   const navItems = [
-    { href: '/offline', label: 'Offline', icon: '🎮' },
-    { href: '/online', label: 'Online', icon: '🌍' },
+    { href: '/online', label: 'Play', icon: '🎮' },
     { href: '/leaderboard', label: 'Leaderboard', icon: '🏆' },
     { href: '/matches', label: 'Matches', icon: '📜' }
   ];
 
-  const isOnlineMode = pathname === '/online';
+  const showConnectButton = pathname === '/online';
 
   return (
     <nav className="bg-gray-900 border-b-2 border-blue-600 shadow-lg sticky top-0 z-50">
@@ -53,16 +52,14 @@ export default function Navbar() {
               ))}
             </div>
             
-            {(isOnlineMode || pathname === '/leaderboard') && (
-              <div className="flex items-center space-x-3">
-                {isConnected && displayName && (
-                  <span className="text-sm text-gray-300 arcade-font">
-                    {displayName}
-                  </span>
-                )}
-                {isOnlineMode && <ConnectButton />}
-              </div>
-            )}
+            <div className="flex items-center space-x-3">
+              {isConnected && displayName && (
+                <span className="text-sm text-gray-300 arcade-font">
+                  {displayName}
+                </span>
+              )}
+              {showConnectButton && <ConnectButton />}
+            </div>
           </div>
         </div>
       </div>

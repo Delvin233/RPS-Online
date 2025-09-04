@@ -13,7 +13,8 @@ interface MatchLogProps {
 }
 
 export default function MatchLog({ matches }: MatchLogProps) {
-  const formatTime = (date: Date) => {
+  const formatTime = (timestamp: Date | string) => {
+    const date = typeof timestamp === 'string' ? new Date(timestamp) : timestamp;
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 

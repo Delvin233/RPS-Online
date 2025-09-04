@@ -16,11 +16,6 @@ export default function MatchesPage() {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        // Get offline matches from localStorage
-        const offlineMatches: MatchWithMode[] = typeof window !== 'undefined' 
-          ? JSON.parse(localStorage.getItem('offline-matches') || '[]')
-          : [];
-        
         // Get online matches from API
         const response = await fetch('/api/matches/completed');
         const data = await response.json();
@@ -37,12 +32,17 @@ export default function MatchesPage() {
           mode: 'online' as const
         })) : [];
         
-        // Combine and sort by timestamp
-        const allMatches = [...offlineMatches, ...onlineMatches].sort((a, b) => 
-          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
+        // Sort online matches by timestamp
+        const sortedMatches = onlineMatches
+          .map(match => ({
+            ...match,
+            timestamp: typeof match.timestamp === 'string' ? new Date(match.timestamp) : match.timestamp
+          }))
+          .sort((a, b) => 
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+          );
         
-        setMatches(allMatches);
+        setMatches(sortedMatches);
       } catch (error) {
         console.error('Failed to fetch matches:', error);
       }
