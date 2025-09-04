@@ -33,15 +33,22 @@ export default function Leaderboard({ players }: LeaderboardProps) {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-black/80 rounded-2xl border-4 border-cyan-400 p-6 shadow-2xl shadow-cyan-400/30"
+        className="arcade-panel rounded-2xl p-6 relative overflow-hidden"
       >
-        <motion.h2 
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          className="text-3xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400"
-        >
-          🏆 LEADERBOARD 🏆
-        </motion.h2>
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-pink-900/10" />
+        <motion.div
+          className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+        />
+        <div className="relative z-10">
+          <motion.h2 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="arcade-font text-xl md:text-2xl text-center mb-6 text-primary"
+          >
+            🏆 LEADERBOARD 🏆
+          </motion.h2>
 
         <div className="space-y-3">
           {sortedPlayers.length === 0 ? (
@@ -53,45 +60,74 @@ export default function Leaderboard({ players }: LeaderboardProps) {
             sortedPlayers.map((player, index) => (
               <motion.div
                 key={player.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                initial={{ opacity: 0, x: -50, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ 
+                  delay: index * 0.15,
+                  type: "spring",
+                  stiffness: 200
+                }}
                 className={`
                   flex items-center justify-between p-4 rounded-lg border-2
                   bg-gradient-to-r ${getRankColor(index)}
-                  border-white/20 backdrop-blur-sm
-                  ${index === 0 ? 'shadow-lg shadow-yellow-400/30' : ''}
+                  ${index === 0 ? 'border-green-500 shadow-lg shadow-green-500/30 victory-glow' : 
+                    index === 1 ? 'border-gray-400 shadow-lg shadow-gray-400/20' :
+                    index === 2 ? 'border-yellow-500 shadow-lg shadow-yellow-500/20' :
+                    'border-blue-400 shadow-lg shadow-blue-400/20'}
+                  backdrop-blur-sm relative overflow-hidden
                 `}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{getRankEmoji(index)}</span>
+                {index === 0 && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-green-400/20 to-transparent"
+                    animate={{ x: ['-100%', '100%'] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                  />
+                )}
+                <div className="flex items-center space-x-4 relative z-10">
+                  <motion.span 
+                    className="text-3xl"
+                    animate={index === 0 ? { 
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 10, -10, 0]
+                    } : {}}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    {getRankEmoji(index)}
+                  </motion.span>
                   <div>
-                    <p className="font-bold text-white text-lg">{player.name}</p>
-                    <p className="text-white/80 text-sm">Rank #{index + 1}</p>
+                    <p className="arcade-font text-white text-sm md:text-base">{player.name}</p>
+                    <p className="text-white/60 text-xs">RANK #{index + 1}</p>
                   </div>
                 </div>
                 
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-white">{player.score}</p>
-                  <p className="text-white/80 text-sm">wins</p>
+                <div className="text-right relative z-10">
+                  <motion.p 
+                    className="arcade-font text-xl md:text-2xl font-bold text-white score-flash"
+                    key={`${player.id}-${player.score}`}
+                  >
+                    {player.score}
+                  </motion.p>
+                  <p className="text-white/60 text-xs">WINS</p>
                 </div>
               </motion.div>
             ))
           )}
         </div>
 
-        {sortedPlayers.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-6 text-center"
-          >
-            <div className="flex justify-center space-x-4 text-sm text-gray-400">
-              <span>🎯 Total Matches: {sortedPlayers.reduce((sum, p) => sum + p.score, 0)}</span>
-            </div>
-          </motion.div>
-        )}
+          {sortedPlayers.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 text-center"
+            >
+              <div className="flex justify-center space-x-4 text-sm text-gray-400 arcade-font">
+                <span>🎯 Total: {sortedPlayers.reduce((sum, p) => sum + p.score, 0)}</span>
+              </div>
+            </motion.div>
+          )}
+        </div>
       </motion.div>
     </div>
   );

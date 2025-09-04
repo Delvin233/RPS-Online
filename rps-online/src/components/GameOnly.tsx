@@ -117,16 +117,30 @@ export default function GameOnly() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white flex items-center justify-center p-4">
-      <motion.div
-        key={gameState.phase}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
-        className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm max-w-4xl w-full"
-      >
-        {renderCurrentPhase()}
-      </motion.div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4">
+      <div className="container mx-auto max-w-7xl pt-8">
+        <motion.div
+          key={gameState.phase}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ 
+            duration: 0.5,
+            type: "spring",
+            stiffness: 200
+          }}
+          className="arcade-panel rounded-2xl p-4 md:p-8 max-w-6xl mx-auto relative overflow-hidden"
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/5 via-purple-900/5 to-pink-900/5" />
+          <motion.div
+            className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+          />
+          <div className="relative z-10">
+            {renderCurrentPhase()}
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }

@@ -13,6 +13,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Fallback to CSS import for Press Start 2P to avoid timeout issues
+
 export const metadata: Metadata = {
   title: "RPS Online - Arcade Rock Paper Scissors",
   description: "Arcade-style Rock Paper Scissors game",
