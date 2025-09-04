@@ -7,7 +7,7 @@ import { determineWinner, generateMatchId } from '@/lib/gameLogic';
 import CommitPhase from './CommitPhase';
 import RevealPhase from './RevealPhase';
 import ResultPhase from './ResultPhase';
-import MatchLog from './MatchLog';
+
 
 export default function OfflineGame() {
   const [gameState, setGameState] = useState<GameState>({
@@ -68,12 +68,21 @@ export default function OfflineGame() {
       timestamp: new Date()
     };
 
-    setGameState(prev => ({
-      ...prev,
-      phase: 'result',
-      currentMatch: match,
-      matches: [...prev.matches, match]
-    }));
+    setGameState(prev => {
+      const newMatches = [...prev.matches, match];
+      
+      // Save offline matches to localStorage
+      const offlineMatches = JSON.parse(localStorage.getItem('offline-matches') || '[]');
+      const matchWithMode = { ...match, mode: 'offline' };
+      localStorage.setItem('offline-matches', JSON.stringify([...offlineMatches, matchWithMode]));
+      
+      return {
+        ...prev,
+        phase: 'result',
+        currentMatch: match,
+        matches: newMatches
+      };
+    });
   }, [gameState.player1Choice, gameState.player2Choice]);
 
   const startNextRound = useCallback(() => {
@@ -135,24 +144,16 @@ export default function OfflineGame() {
         </p>
       </motion.header>
 
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <motion.div
-              key={gameState.phase}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm"
-            >
-              {renderCurrentPhase()}
-            </motion.div>
-          </div>
-
-          <div>
-            <MatchLog matches={gameState.matches} />
-          </div>
-        </div>
+      <div className="container mx-auto px-4 max-w-4xl">
+        <motion.div
+          key={gameState.phase}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm"
+        >
+          {renderCurrentPhase()}
+        </motion.div>
       </div>
     </div>
   );

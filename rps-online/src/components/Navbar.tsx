@@ -53,14 +53,14 @@ export default function Navbar() {
               ))}
             </div>
             
-            {isOnlineMode && (
+            {(isOnlineMode || pathname === '/leaderboard') && (
               <div className="flex items-center space-x-3">
                 {isConnected && displayName && (
                   <span className="text-sm text-gray-300 arcade-font">
                     {displayName}
                   </span>
                 )}
-                <ConnectButton />
+                {isOnlineMode && <ConnectButton />}
               </div>
             )}
           </div>

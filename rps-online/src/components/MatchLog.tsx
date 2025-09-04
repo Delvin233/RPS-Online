@@ -4,8 +4,12 @@ import { motion } from 'framer-motion';
 import { Match } from '@/lib/types';
 import { getChoiceEmoji } from '@/lib/gameLogic';
 
+interface MatchWithMode extends Match {
+  mode?: 'offline' | 'online';
+}
+
 interface MatchLogProps {
-  matches: Match[];
+  matches: MatchWithMode[];
 }
 
 export default function MatchLog({ matches }: MatchLogProps) {
@@ -68,7 +72,18 @@ export default function MatchLog({ matches }: MatchLogProps) {
                 `}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-gray-400">{formatTime(match.timestamp)}</span>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-gray-400">{formatTime(match.timestamp)}</span>
+                    {match.mode && (
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        match.mode === 'offline' 
+                          ? 'bg-gray-600 text-gray-200' 
+                          : 'bg-blue-600 text-blue-200'
+                      }`}>
+                        {match.mode === 'offline' ? '🎮' : '🌐'}
+                      </span>
+                    )}
+                  </div>
                   <span className="text-xl">{getResultIcon(match)}</span>
                 </div>
 
