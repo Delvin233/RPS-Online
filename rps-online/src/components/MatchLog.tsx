@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { Match } from '@/lib/types';
 import { getChoiceEmoji } from '@/lib/gameLogic';
 
-interface BeefLogProps {
+interface MatchLogProps {
   matches: Match[];
 }
 
-export default function BeefLog({ matches }: BeefLogProps) {
+export default function MatchLog({ matches }: MatchLogProps) {
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
@@ -26,7 +26,7 @@ export default function BeefLog({ matches }: BeefLogProps) {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -37,14 +37,15 @@ export default function BeefLog({ matches }: BeefLogProps) {
           animate={{ scale: 1 }}
           className="text-3xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400"
         >
-          📜 BEEF LOG 📜
+          📜 MATCH LOG 📜
         </motion.h2>
 
-        <div className="overflow-y-auto h-72 space-y-3 scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-gray-800">
+        <div className="overflow-y-auto h-72 scrollbar-thin scrollbar-thumb-purple-400 scrollbar-track-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {matches.length === 0 ? (
             <div className="text-center text-gray-400 py-8">
-              <p className="text-xl">🤐 No beefs settled yet!</p>
-              <p>Play some matches to build history</p>
+              <p className="text-xl">🎮 No matches yet!</p>
+              <p>Play some games to build history</p>
             </div>
           ) : (
             matches.slice().reverse().map((match, index) => (
@@ -89,6 +90,7 @@ export default function BeefLog({ matches }: BeefLogProps) {
               </motion.div>
             ))
           )}
+          </div>
         </div>
 
         {matches.length > 0 && (
@@ -98,7 +100,7 @@ export default function BeefLog({ matches }: BeefLogProps) {
             transition={{ delay: 0.3 }}
             className="mt-4 text-center text-xs text-gray-400"
           >
-            📊 Total Beefs Settled: {matches.length}
+            📊 Total Matches: {matches.length}
           </motion.div>
         )}
       </motion.div>

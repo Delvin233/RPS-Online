@@ -2,15 +2,13 @@
 
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { GameState, Choice, Player, Match } from '@/lib/types';
+import { GameState, Choice, Match } from '@/lib/types';
 import { determineWinner, generateMatchId } from '@/lib/gameLogic';
 import CommitPhase from './CommitPhase';
 import RevealPhase from './RevealPhase';
 import ResultPhase from './ResultPhase';
-import Leaderboard from './Leaderboard';
-import MatchLog from './MatchLog';
 
-export default function GameBoard() {
+export default function GameOnly() {
   const [gameState, setGameState] = useState<GameState>({
     phase: 'commit',
     player1Choice: null,
@@ -24,25 +22,16 @@ export default function GameBoard() {
   });
 
   const handlePlayer1Choice = useCallback((choice: Choice) => {
-    setGameState(prev => ({
-      ...prev,
-      player1Choice: choice
-    }));
+    setGameState(prev => ({ ...prev, player1Choice: choice }));
   }, []);
 
   const handlePlayer2Choice = useCallback((choice: Choice) => {
-    setGameState(prev => ({
-      ...prev,
-      player2Choice: choice
-    }));
+    setGameState(prev => ({ ...prev, player2Choice: choice }));
   }, []);
 
   const startRevealPhase = useCallback(() => {
     if (gameState.player1Choice && gameState.player2Choice) {
-      setGameState(prev => ({
-        ...prev,
-        phase: 'reveal'
-      }));
+      setGameState(prev => ({ ...prev, phase: 'reveal' }));
     }
   }, [gameState.player1Choice, gameState.player2Choice]);
 
@@ -65,7 +54,7 @@ export default function GameBoard() {
       player1Choice: gameState.player1Choice,
       player2Choice: gameState.player2Choice,
       winner,
-      result: result === 'lose' ? 'win' : result, // Adjust for Player 2 perspective
+      result: result === 'lose' ? 'win' : result,
       timestamp: new Date()
     };
 
@@ -93,7 +82,6 @@ export default function GameBoard() {
     }));
   }, []);
 
-  // Auto-advance to reveal when both players have chosen
   if (gameState.phase === 'commit' && gameState.player1Choice && gameState.player2Choice) {
     setTimeout(startRevealPhase, 500);
   }
@@ -129,59 +117,16 @@ export default function GameBoard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
-      {/* Header */}
-      <motion.header 
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center py-8"
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white flex items-center justify-center p-4">
+      <motion.div
+        key={gameState.phase}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm max-w-4xl w-full"
       >
-        <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-4">
-          🎮 RPS ONLINE 🎮
-        </h1>
-        <p className="text-xl text-gray-300">
-          ⚡ Arcade Rock Paper Scissors ⚡
-        </p>
-      </motion.header>
-
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Leaderboard */}
-          <div className="order-2 lg:order-1">
-            <Leaderboard players={gameState.players} />
-          </div>
-
-          {/* Main Game Area */}
-          <div className="order-1 lg:order-2">
-            <motion.div
-              key={gameState.phase}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm"
-            >
-              {renderCurrentPhase()}
-            </motion.div>
-          </div>
-
-          {/* Match Log */}
-          <div className="order-3">
-            <MatchLog matches={gameState.matches} />
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <motion.footer 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="text-center py-8 mt-12"
-      >
-        <p className="text-gray-400">
-          🔥 Arcade-Style Rock Paper Scissors • Ready for Web3 🔥
-        </p>
-      </motion.footer>
+        {renderCurrentPhase()}
+      </motion.div>
     </div>
   );
 }
