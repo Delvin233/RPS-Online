@@ -8,7 +8,7 @@ import CommitPhase from './CommitPhase';
 import RevealPhase from './RevealPhase';
 import ResultPhase from './ResultPhase';
 import Leaderboard from './Leaderboard';
-import BeefLog from './BeefLog';
+import MatchLog from './MatchLog';
 
 export default function GameBoard() {
   const [gameState, setGameState] = useState<GameState>({
@@ -140,7 +140,7 @@ export default function GameBoard() {
           🎮 RPS ONLINE 🎮
         </h1>
         <p className="text-xl text-gray-300">
-          ⚡ Blockchain Beef Settler ⚡
+          ⚡ Arcade Rock Paper Scissors ⚡
         </p>
       </motion.header>
 
@@ -164,9 +164,9 @@ export default function GameBoard() {
             </motion.div>
           </div>
 
-          {/* Beef Log */}
+          {/* Match Log */}
           <div className="order-3">
-            <BeefLog matches={gameState.matches} />
+            <MatchLog matches={gameState.matches} />
           </div>
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function GameBoard() {
         className="text-center py-8 mt-12"
       >
         <p className="text-gray-400">
-          🔥 Built for the hackathon • Ready for Web3 integration 🔥
+          🔥 Arcade-Style Rock Paper Scissors • Ready for Web3 🔥
         </p>
       </motion.footer>
     </div>
