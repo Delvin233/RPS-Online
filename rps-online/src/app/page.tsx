@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
           className="text-center mb-16"
         >
           <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-6">
-            🎮 RPS ONLINE 🎮
+            RPS ONLINE
           </h1>
           <p className="text-2xl text-gray-300 mb-8">
             The Ultimate Rock Paper Scissors Experience
@@ -26,12 +26,22 @@ export default function Home() {
           transition={{ delay: 0.2 }}
           className="bg-black/50 rounded-2xl border-4 border-white/20 p-8 backdrop-blur-sm max-w-2xl mx-auto mb-16"
         >
-          <h2 className="arcade-font text-2xl text-cyan-400 mb-6 text-center">🎯 Game Rules</h2>
+          <h2 className="arcade-font text-2xl text-cyan-400 mb-6 text-center">
+            🎯 Game Rules
+          </h2>
           <ul className="space-y-3 text-gray-300 text-lg">
-            <li>🪨 <strong>Rock</strong> crushes Scissors</li>
-            <li>📄 <strong>Paper</strong> covers Rock</li>
-            <li>✂️ <strong>Scissors</strong> cuts Paper</li>
-            <li>🤝 Same choice = <strong>Draw</strong></li>
+            <li>
+              🪨 <strong>Rock</strong> crushes Scissors
+            </li>
+            <li>
+              📄 <strong>Paper</strong> covers Rock
+            </li>
+            <li>
+              ✂️ <strong>Scissors</strong> cuts Paper
+            </li>
+            <li>
+              🤝 Same choice = <strong>Draw</strong>
+            </li>
           </ul>
         </motion.div>
 
@@ -57,9 +67,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
           className="text-center mt-16 text-gray-400"
-        >
-          <p>🔥 Arcade-Style Rock Paper Scissors • Ready for Web3 🔥</p>
-        </motion.div>
+        ></motion.div>
       </div>
     </div>
   );

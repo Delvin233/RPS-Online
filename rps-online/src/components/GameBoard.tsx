@@ -1,47 +1,47 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
-import { GameState, Choice, Match } from '@/lib/types';
-import { determineWinner, generateMatchId } from '@/lib/gameLogic';
-import CommitPhase from './CommitPhase';
-import RevealPhase from './RevealPhase';
-import ResultPhase from './ResultPhase';
-import Leaderboard from './Leaderboard';
-import MatchLog from './MatchLog';
+import { useState, useCallback } from "react";
+import { motion } from "framer-motion";
+import { GameState, Choice, Match } from "@/lib/types";
+import { determineWinner, generateMatchId } from "@/lib/gameLogic";
+import CommitPhase from "./CommitPhase";
+import RevealPhase from "./RevealPhase";
+import ResultPhase from "./ResultPhase";
+import Leaderboard from "./Leaderboard";
+import MatchLog from "./MatchLog";
 
 export default function GameBoard() {
   const [gameState, setGameState] = useState<GameState>({
-    phase: 'commit',
+    phase: "commit",
     player1Choice: null,
     player2Choice: null,
     currentMatch: null,
     players: [
-      { id: 'p1', name: 'Player 1', score: 0 },
-      { id: 'p2', name: 'Player 2', score: 0 }
+      { id: "p1", name: "Player 1", score: 0 },
+      { id: "p2", name: "Player 2", score: 0 },
     ],
-    matches: []
+    matches: [],
   });
 
   const handlePlayer1Choice = useCallback((choice: Choice) => {
-    setGameState(prev => ({
+    setGameState((prev) => ({
       ...prev,
-      player1Choice: choice
+      player1Choice: choice,
     }));
   }, []);
 
   const handlePlayer2Choice = useCallback((choice: Choice) => {
-    setGameState(prev => ({
+    setGameState((prev) => ({
       ...prev,
-      player2Choice: choice
+      player2Choice: choice,
     }));
   }, []);
 
   const startRevealPhase = useCallback(() => {
     if (gameState.player1Choice && gameState.player2Choice) {
-      setGameState(prev => ({
+      setGameState((prev) => ({
         ...prev,
-        phase: 'reveal'
+        phase: "reveal",
       }));
     }
   }, [gameState.player1Choice, gameState.player2Choice]);
@@ -49,58 +49,65 @@ export default function GameBoard() {
   const showResults = useCallback(() => {
     if (!gameState.player1Choice || !gameState.player2Choice) return;
 
-    const result = determineWinner(gameState.player1Choice, gameState.player2Choice);
+    const result = determineWinner(
+      gameState.player1Choice,
+      gameState.player2Choice
+    );
     let winner: string | null = null;
 
-    if (result === 'win') {
-      winner = 'Player 1';
-    } else if (result === 'lose') {
-      winner = 'Player 2';
+    if (result === "win") {
+      winner = "Player 1";
+    } else if (result === "lose") {
+      winner = "Player 2";
     }
 
     const match: Match = {
       id: generateMatchId(),
-      player1: 'Player 1',
-      player2: 'Player 2',
+      player1: "Player 1",
+      player2: "Player 2",
       player1Choice: gameState.player1Choice,
       player2Choice: gameState.player2Choice,
       winner,
-      result: result === 'lose' ? 'win' : result, // Adjust for Player 2 perspective
-      timestamp: new Date()
+      result: result === "lose" ? "win" : result, // Adjust for Player 2 perspective
+      timestamp: new Date(),
     };
 
-    setGameState(prev => ({
+    setGameState((prev) => ({
       ...prev,
-      phase: 'result',
+      phase: "result",
       currentMatch: match,
       matches: [...prev.matches, match],
-      players: prev.players.map(player => {
+      players: prev.players.map((player) => {
         if (winner === player.name) {
           return { ...player, score: player.score + 1 };
         }
         return player;
-      })
+      }),
     }));
   }, [gameState.player1Choice, gameState.player2Choice]);
 
   const startNextRound = useCallback(() => {
-    setGameState(prev => ({
+    setGameState((prev) => ({
       ...prev,
-      phase: 'commit',
+      phase: "commit",
       player1Choice: null,
       player2Choice: null,
-      currentMatch: null
+      currentMatch: null,
     }));
   }, []);
 
   // Auto-advance to reveal when both players have chosen
-  if (gameState.phase === 'commit' && gameState.player1Choice && gameState.player2Choice) {
+  if (
+    gameState.phase === "commit" &&
+    gameState.player1Choice &&
+    gameState.player2Choice
+  ) {
     setTimeout(startRevealPhase, 500);
   }
 
   const renderCurrentPhase = () => {
     switch (gameState.phase) {
-      case 'commit':
+      case "commit":
         return (
           <CommitPhase
             onPlayer1Choice={handlePlayer1Choice}
@@ -109,7 +116,7 @@ export default function GameBoard() {
             player2Ready={!!gameState.player2Choice}
           />
         );
-      case 'reveal':
+      case "reveal":
         return (
           <RevealPhase
             player1Choice={gameState.player1Choice!}
@@ -117,10 +124,10 @@ export default function GameBoard() {
             onRevealComplete={showResults}
           />
         );
-      case 'result':
+      case "result":
         return (
           <ResultPhase
-            result={gameState.currentMatch?.result || 'draw'}
+            result={gameState.currentMatch?.result || "draw"}
             winner={gameState.currentMatch?.winner || null}
             onNextRound={startNextRound}
           />
@@ -131,13 +138,13 @@ export default function GameBoard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center py-8"
       >
         <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-4">
-          🎮 RPS ONLINE 🎮
+          RPS ONLINE
         </h1>
         <p className="text-xl text-gray-300">
           ⚡ Arcade Rock Paper Scissors ⚡
@@ -172,7 +179,7 @@ export default function GameBoard() {
       </div>
 
       {/* Footer */}
-      <motion.footer 
+      <motion.footer
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
