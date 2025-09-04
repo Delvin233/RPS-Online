@@ -1,5 +1,5 @@
-import GameBoard from '@/components/GameBoard';
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return <GameBoard />;
+  redirect('/game');
 }
