@@ -1,7 +1,7 @@
 'use client';
 
-import GameBoard from '@/components/GameBoard';
+import OfflineGame from '@/components/OfflineGame';
 
 export default function OfflinePage() {
-  return <GameBoard />;
+  return <OfflineGame />;
 }
