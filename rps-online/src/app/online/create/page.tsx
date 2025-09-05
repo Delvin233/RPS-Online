@@ -20,9 +20,11 @@ export default function CreateRoomPage() {
     abi: CONTRACT_ABI,
     eventName: 'MatchCreated',
     onLogs(logs) {
+      console.log('MatchCreated event received:', logs);
       const log = logs.find(l => (l as any).args?.creator === address);
       if (log && (log as any).args?.matchId) {
         const id = Number((log as any).args.matchId);
+        console.log('Match created with ID:', id);
         setMatchId(id);
         setWaiting(true);
       }
@@ -64,17 +66,44 @@ export default function CreateRoomPage() {
         {waiting && matchId ? (
           <div className="space-y-6">
             <div className="bg-black/50 rounded-lg p-6 border-2 border-yellow-400">
-              <p className="text-gray-300 mb-2">Match ID:</p>
-              <p className="arcade-font text-3xl text-yellow-400">{matchId}</p>
+              <p className="text-gray-300 mb-2">Share this Match ID with your opponent:</p>
+              <div className="flex items-center justify-center space-x-4">
+                <p className="arcade-font text-3xl text-yellow-400">{matchId}</p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    navigator.clipboard.writeText(matchId.toString());
+                    alert('Match ID copied to clipboard!');
+                  }}
+                  className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm"
+                >
+                  COPY
+                </motion.button>
+              </div>
             </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => router.push(`/online/match/${matchId}`)}
-              className="arcade-font px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg border-2 border-green-400 transition-all text-xl"
-            >
-              ENTER MATCH
-            </motion.button>
+            <div className="space-y-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push(`/online/match/${matchId}`)}
+                className="arcade-font px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg border-2 border-green-400 transition-all text-xl"
+              >
+                ENTER MATCH
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setMatchId(null);
+                  setWaiting(false);
+                  setError('');
+                }}
+                className="arcade-font px-8 py-4 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600 text-white rounded-lg border-2 border-gray-400 transition-all text-xl"
+              >
+                CREATE NEW MATCH
+              </motion.button>
+            </div>
           </div>
         ) : (
           <div className="space-y-4">
