@@ -24,7 +24,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-blue-950/50 rounded-2xl border-4 border-blue-400/30 p-8 backdrop-blur-sm max-w-2xl mx-auto mb-16">
+          className="bg-blue-950/50 rounded-2xl border-4 border-blue-400/30 p-8 backdrop-blur-sm max-w-2xl mx-auto mb-16"
         >
           <h2 className="arcade-font text-2xl text-blue-400 mb-6 text-center">
             Game Rules
