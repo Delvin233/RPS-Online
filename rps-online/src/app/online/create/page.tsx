@@ -20,9 +20,9 @@ export default function CreateRoomPage() {
     abi: CONTRACT_ABI,
     eventName: 'MatchCreated',
     onLogs(logs) {
-      const log = logs.find(l => l.args.creator === address);
-      if (log && log.args.matchId) {
-        const id = Number(log.args.matchId);
+      const log = logs.find(l => (l as any).args?.creator === address);
+      if (log && (log as any).args?.matchId) {
+        const id = Number((log as any).args.matchId);
         setMatchId(id);
         setWaiting(true);
       }

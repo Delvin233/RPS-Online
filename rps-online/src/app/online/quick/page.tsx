@@ -19,9 +19,9 @@ export default function QuickMatchPage() {
     abi: CONTRACT_ABI,
     eventName: 'MatchCreated',
     onLogs(logs) {
-      const log = logs.find(l => l.args.creator === address);
-      if (log && log.args.matchId) {
-        const matchId = Number(log.args.matchId);
+      const log = logs.find(l => (l as any).args?.creator === address);
+      if (log && (log as any).args?.matchId) {
+        const matchId = Number((log as any).args.matchId);
         router.push(`/online/match/${matchId}`);
       }
     },
