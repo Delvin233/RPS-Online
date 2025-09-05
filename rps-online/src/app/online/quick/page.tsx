@@ -51,7 +51,7 @@ export default function QuickMatchPage() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-4 flex items-center justify-center">
         <div className="text-center space-y-8">
           <h1 className="arcade-font text-4xl text-primary">QUICK MATCH</h1>
           <p className="text-gray-300">Please connect your wallet to play online</p>
@@ -62,7 +62,7 @@ export default function QuickMatchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-4 flex items-center justify-center">
       <div className="text-center space-y-8">
         <h1 className="arcade-font text-4xl text-primary">QUICK MATCH</h1>
         

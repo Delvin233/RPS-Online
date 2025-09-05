@@ -19,7 +19,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-gray-900 border-b-2 border-blue-600 shadow-lg sticky top-0 z-50">
+    <nav className="bg-slate-900/95 backdrop-blur-sm border-b-2 border-blue-500 shadow-lg shadow-blue-500/20 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="arcade-font text-xl text-primary hover:text-accent transition-colors">
@@ -36,10 +36,10 @@ export default function Navbar() {
                     className={`
                       px-4 py-2 rounded-lg font-medium transition-all
                       ${pathname.startsWith('/online') && item.href === '/online'
-                        ? 'bg-blue-600 text-white shadow-md'
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
                         : pathname === item.href
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                        : 'text-slate-300 hover:text-white hover:bg-blue-800/50'
                       }
                     `}
                   >

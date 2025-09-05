@@ -36,7 +36,7 @@ export default function JoinRoomPage() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-4 flex items-center justify-center">
         <div className="text-center space-y-8">
           <h1 className="arcade-font text-4xl text-primary">JOIN MATCH</h1>
           <p className="text-gray-300">Please connect your wallet to join a match</p>
@@ -47,7 +47,7 @@ export default function JoinRoomPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white p-4 flex items-center justify-center">
       <div className="text-center space-y-8 max-w-md">
         <h1 className="arcade-font text-4xl text-primary">JOIN MATCH</h1>
         
@@ -57,7 +57,7 @@ export default function JoinRoomPage() {
             placeholder="Enter Match ID"
             value={roomCode}
             onChange={(e) => setRoomCode(e.target.value)}
-            className="w-full px-4 py-3 bg-black/50 border-2 border-gray-600 rounded-lg text-white text-center arcade-font text-xl focus:border-blue-400 focus:outline-none"
+            className="w-full px-4 py-3 bg-blue-950/50 border-2 border-blue-600 rounded-lg text-white text-center arcade-font text-xl focus:border-cyan-400 focus:outline-none backdrop-blur-sm"
             maxLength={10}
           />
           
