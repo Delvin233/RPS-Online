@@ -57,14 +57,30 @@ class MatchStore {
   }
 
   async commitMove(matchId: string, playerId: string, choice: Choice): Promise<OnlineMatch | null> {
+    console.log('commitMove called with:', { matchId, playerId, choice });
     const match = await db.getMatch(matchId);
-    if (!match || match.status === 'completed') return null;
+    console.log('Found match:', match);
+    
+    if (!match) {
+      console.log('No match found');
+      return null;
+    }
+    
+    if (match.status === 'completed') {
+      console.log('Match already completed');
+      return null;
+    }
+
+    console.log('Player IDs - match.player1Id:', match.player1Id, 'match.player2Id:', match.player2Id, 'current playerId:', playerId);
 
     if (match.player1Id === playerId) {
+      console.log('Setting player1Choice');
       match.player1Choice = choice;
     } else if (match.player2Id === playerId) {
+      console.log('Setting player2Choice');
       match.player2Choice = choice;
     } else {
+      console.log('Player not found in match');
       return null;
     }
 
@@ -73,6 +89,7 @@ class MatchStore {
     }
 
     await db.saveMatch(match);
+    console.log('Match saved:', match);
     return match;
   }
 
