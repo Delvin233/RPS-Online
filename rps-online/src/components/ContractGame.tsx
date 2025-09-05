@@ -56,7 +56,7 @@ export default function ContractGame({ matchId }: ContractGameProps) {
     return <div className="text-center">Loading match...</div>;
   }
 
-  const [player1, player2, commit1, commit2, move1, move2, phase, winner] = matchData;
+  const [player1, player2, commit1, commit2, move1, move2, phase, winner] = matchData as any[];
   const isPlayer1 = address === player1;
   const isPlayer2 = address === player2;
   const currentPhase = Number(phase);
