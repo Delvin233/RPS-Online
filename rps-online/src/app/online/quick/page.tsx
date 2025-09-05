@@ -44,6 +44,11 @@ export default function QuickMatchPage() {
     }
   };
 
+  const cancelSearch = () => {
+    setSearching(false);
+    setError('');
+  };
+
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
@@ -71,6 +76,18 @@ export default function QuickMatchPage() {
               🔍
             </motion.div>
             <p className="text-xl text-gray-300">{isPending ? 'Creating match...' : 'Searching for an opponent...'}</p>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSearching(false);
+                setError('');
+              }}
+              disabled={isPending}
+              className="arcade-font px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 disabled:opacity-50 text-white rounded-lg border-2 border-red-400 transition-all"
+            >
+              CANCEL
+            </motion.button>
           </div>
         ) : (
           <div className="space-y-4">
