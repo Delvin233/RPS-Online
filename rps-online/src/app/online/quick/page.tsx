@@ -1,30 +1,45 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useWriteContract, useWatchContractEvent } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/lib/contract';
 
 export default function QuickMatchPage() {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const [searching, setSearching] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
+  const { writeContract, isPending } = useWriteContract();
+
+  useWatchContractEvent({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    eventName: 'MatchCreated',
+    onLogs(logs) {
+      const log = logs.find(l => l.args.creator === address);
+      if (log && log.args.matchId) {
+        const matchId = Number(log.args.matchId);
+        router.push(`/online/match/${matchId}`);
+      }
+    },
+  });
 
   const findMatch = async () => {
+    if (!address) return;
     setSearching(true);
+    setError('');
     try {
-      const response = await fetch('/api/matches/quick', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId: Math.random().toString(36).substring(2, 10) })
+      writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: 'createMatch',
+        args: [address],
       });
-      const data = await response.json();
-      if (data.matchId) {
-        router.push(`/online/match/${data.matchId}`);
-      }
-    } catch (error) {
-      console.error('Failed to find match:', error);
+    } catch (err) {
+      setError('Failed to create match');
       setSearching(false);
     }
   };
@@ -33,7 +48,7 @@ export default function QuickMatchPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
         <div className="text-center space-y-8">
-          <h1 className="arcade-font text-4xl text-primary">⚡ QUICK MATCH ⚡</h1>
+          <h1 className="arcade-font text-4xl text-primary">QUICK MATCH</h1>
           <p className="text-gray-300">Please connect your wallet to play online</p>
           <ConnectButton />
         </div>
@@ -44,9 +59,9 @@ export default function QuickMatchPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
       <div className="text-center space-y-8">
-        <h1 className="arcade-font text-4xl text-primary">⚡ QUICK MATCH ⚡</h1>
+        <h1 className="arcade-font text-4xl text-primary">QUICK MATCH</h1>
         
-        {searching ? (
+        {searching || isPending ? (
           <div className="space-y-6">
             <motion.div
               animate={{ rotate: 360 }}
@@ -55,17 +70,20 @@ export default function QuickMatchPage() {
             >
               🔍
             </motion.div>
-            <p className="text-xl text-gray-300">Searching for an opponent...</p>
+            <p className="text-xl text-gray-300">{isPending ? 'Creating match...' : 'Searching for an opponent...'}</p>
           </div>
         ) : (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={findMatch}
-            className="arcade-font px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500 text-white rounded-lg border-2 border-green-400 transition-all text-xl"
-          >
-            🎯 FIND MATCH
-          </motion.button>
+          <div className="space-y-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={findMatch}
+              className="arcade-font px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500 text-white rounded-lg border-2 border-green-400 transition-all text-xl"
+            >
+              FIND MATCH
+            </motion.button>
+            {error && <p className="text-red-400">{error}</p>}
+          </div>
         )}
       </div>
     </div>

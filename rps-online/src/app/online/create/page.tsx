@@ -1,40 +1,46 @@
 'use client';
 
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useWriteContract, useWatchContractEvent } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/lib/contract';
 
 export default function CreateRoomPage() {
-  const { isConnected } = useAccount();
-  const [roomCode, setRoomCode] = useState('');
+  const { address, isConnected } = useAccount();
+  const [matchId, setMatchId] = useState<number | null>(null);
   const [waiting, setWaiting] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
+  const { writeContract, isPending } = useWriteContract();
+
+  useWatchContractEvent({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    eventName: 'MatchCreated',
+    onLogs(logs) {
+      const log = logs.find(l => l.args.creator === address);
+      if (log && log.args.matchId) {
+        const id = Number(log.args.matchId);
+        setMatchId(id);
+        setWaiting(true);
+      }
+    },
+  });
 
   const createRoom = async () => {
+    if (!address) return;
+    setError('');
     try {
-      const response = await fetch('/api/matches/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId: Math.random().toString(36).substring(2, 10) })
+      writeContract({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: 'createMatch',
+        args: [address], // Create match with self as opponent for now
       });
-      const data = await response.json();
-      if (data.match) {
-        setRoomCode(data.match.matchId);
-        setWaiting(true);
-        // Poll for opponent
-        const interval = setInterval(async () => {
-          const checkResponse = await fetch(`/api/matches/${data.match.matchId}`);
-          const checkData = await checkResponse.json();
-          if (checkData.match && checkData.match.player2Id) {
-            clearInterval(interval);
-            router.push(`/online/match/${data.match.matchId}`);
-          }
-        }, 2000);
-      }
-    } catch (error) {
-      console.error('Failed to create room:', error);
+    } catch (err) {
+      setError('Failed to create room');
     }
   };
 
@@ -42,7 +48,7 @@ export default function CreateRoomPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
         <div className="text-center space-y-8">
-          <h1 className="arcade-font text-4xl text-primary">🏠 CREATE ROOM 🏠</h1>
+          <h1 className="arcade-font text-4xl text-primary">CREATE ROOM</h1>
           <p className="text-gray-300">Please connect your wallet to create a room</p>
           <ConnectButton />
         </div>
@@ -53,32 +59,36 @@ export default function CreateRoomPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white p-4 flex items-center justify-center">
       <div className="text-center space-y-8">
-        <h1 className="arcade-font text-4xl text-primary">🏠 CREATE ROOM 🏠</h1>
+        <h1 className="arcade-font text-4xl text-primary">CREATE ROOM</h1>
         
-        {waiting ? (
+        {waiting && matchId ? (
           <div className="space-y-6">
             <div className="bg-black/50 rounded-lg p-6 border-2 border-yellow-400">
-              <p className="text-gray-300 mb-2">Room Code:</p>
-              <p className="arcade-font text-3xl text-yellow-400">{roomCode}</p>
+              <p className="text-gray-300 mb-2">Match ID:</p>
+              <p className="arcade-font text-3xl text-yellow-400">{matchId}</p>
             </div>
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="text-4xl"
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => router.push(`/online/match/${matchId}`)}
+              className="arcade-font px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg border-2 border-green-400 transition-all text-xl"
             >
-              ⏳
-            </motion.div>
-            <p className="text-xl text-gray-300">Waiting for opponent to join...</p>
+              ENTER MATCH
+            </motion.button>
           </div>
         ) : (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={createRoom}
-            className="arcade-font px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white rounded-lg border-2 border-purple-400 transition-all text-xl"
-          >
-            🎮 CREATE ROOM
-          </motion.button>
+          <div className="space-y-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={createRoom}
+              disabled={isPending}
+              className="arcade-font px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 text-white rounded-lg border-2 border-purple-400 transition-all text-xl"
+            >
+              {isPending ? 'CREATING...' : 'CREATE ROOM'}
+            </motion.button>
+            {error && <p className="text-red-400">{error}</p>}
+          </div>
         )}
       </div>
     </div>

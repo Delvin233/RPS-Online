@@ -1,90 +1,50 @@
-# 🎮 RPS Online - Blockchain Beef Settler
+# RPS-Online
+A decentralized Rock-Paper-Scissors game built with Next.js and Solidity smart contracts.
 
-An arcade-style Rock-Paper-Scissors game built with Next.js, TypeScript, Tailwind CSS, and Framer Motion.
+## Smart Contract Development
 
-## 🚀 Features
-
-- **Arcade-Style UI**: Neon colors, glowing borders, and retro animations
-- **Game Flow**: Commit → Reveal → Result phases
-- **Leaderboard**: Track player scores with arcade-style rankings
-- **Beef Log**: Scrollable history of all matches
-- **Animations**: Flashy hand reveals and victory celebrations
-- **Sound Ready**: Placeholder integration for Howler.js sound effects
-
-## 🛠️ Tech Stack
-
-- **Next.js 15** with App Router
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **Framer Motion** for animations
-- **Howler.js** (ready for sound integration)
-
-## 🎯 Getting Started
-
-1. Install dependencies:
+### Setup
 ```bash
+cd contracts
 npm install
 ```
 
-2. Run the development server:
+### Environment Setup
+1. Copy `.env.example` to `.env`
+2. Add your Base Sepolia RPC URL and private key:
+```
+BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
+PRIVATE_KEY=your_private_key_here
+```
+
+### Commands
 ```bash
+# Compile contracts
+npx hardhat compile
+
+# Run tests
+npx hardhat test
+
+# Deploy to Base Sepolia
+npx hardhat run scripts/deploy.ts --network baseSepolia
+```
+
+### Contract Features
+- **Commit-Reveal Scheme**: Prevents cheating by hiding moves until both players commit
+- **On-chain Game Logic**: Fully decentralized gameplay
+- **Event Logging**: Track match creation, moves, and results
+- **Secure Randomness**: Uses cryptographic commitments
+
+### Game Flow
+1. Player 1 creates match with opponent address
+2. Both players commit their moves (encrypted)
+3. Both players reveal their moves with salt
+4. Contract determines winner automatically
+
+## Frontend Development
+```bash
+npm install
 npm run dev
 ```
 
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## 🎮 How to Play
-
-1. **Commit Phase**: Both players secretly choose Rock, Paper, or Scissors
-2. **Reveal Phase**: Watch the flashy hand animations reveal the choices
-3. **Result Phase**: See who wins with victory celebrations
-4. **Repeat**: Start the next round and climb the leaderboard!
-
-## 🔮 Web3 Integration Ready
-
-This project is structured to easily add:
-- Smart contracts for on-chain game logic
-- NFT rewards for win streaks
-- Cryptocurrency wagering
-- Decentralized leaderboards
-
-## 📁 Project Structure
-
-```
-src/
-├── app/
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── GameBoard.tsx      # Main game controller
-│   ├── CommitPhase.tsx    # Secret choice selection
-│   ├── RevealPhase.tsx    # Animated reveal
-│   ├── ResultPhase.tsx    # Victory/defeat display
-│   ├── Leaderboard.tsx    # Player rankings
-│   └── BeefLog.tsx        # Match history
-└── lib/
-    ├── types.ts           # TypeScript definitions
-    └── gameLogic.ts       # Game rules and utilities
-```
-
-## 🎨 Styling
-
-The game features a full arcade aesthetic with:
-- Neon gradient backgrounds
-- Glowing borders and shadows
-- Retro color schemes (cyan, purple, pink, yellow)
-- Custom scrollbars
-- Smooth animations and transitions
-
-## 🔊 Sound Integration
-
-Ready for Howler.js integration with placeholder sound effects for:
-- Victory fanfare
-- Defeat sounds
-- Draw notifications
-- Button clicks and interactions
-
----
-
-Built for hackathons and ready for Web3! 🚀
+Visit `http://localhost:3000` to play the game.

@@ -1,37 +1,45 @@
-// Simple Vercel KV or use Vercel Postgres
-// For now, using a simple global variable that resets on cold starts
-// In production, replace with Vercel KV, Supabase, or PlanetScale
-
 import { OnlineMatch } from './matchStore';
 
-// Make it truly global across all modules
+// Use a more persistent global store
 declare global {
-  var globalMatches: Map<string, OnlineMatch> | undefined;
+  var __GLOBAL_MATCHES__: Map<string, OnlineMatch> | undefined;
 }
 
-const globalMatches = globalThis.globalMatches ?? new Map<string, OnlineMatch>();
-globalThis.globalMatches = globalMatches;
+if (!globalThis.__GLOBAL_MATCHES__) {
+  globalThis.__GLOBAL_MATCHES__ = new Map<string, OnlineMatch>();
+}
+
+const matches = globalThis.__GLOBAL_MATCHES__;
 
 export const db = {
   async getMatch(matchId: string): Promise<OnlineMatch | null> {
-    return globalMatches.get(matchId) || null;
+    console.log('Getting match:', matchId, 'Available matches:', Array.from(matches.keys()));
+    const match = matches.get(matchId) || null;
+    console.log('Found match:', match);
+    return match;
   },
 
   async saveMatch(match: OnlineMatch): Promise<void> {
-    globalMatches.set(match.matchId, match);
+    console.log('Saving match:', match.matchId, match);
+    matches.set(match.matchId, {
+      ...match,
+      createdAt: new Date(match.createdAt),
+      completedAt: match.completedAt ? new Date(match.completedAt) : null
+    });
+    console.log('Total matches after save:', matches.size);
   },
 
   async getAllMatches(): Promise<OnlineMatch[]> {
-    return Array.from(globalMatches.values());
+    return Array.from(matches.values());
   },
 
   async getCompletedMatches(): Promise<OnlineMatch[]> {
-    return Array.from(globalMatches.values())
+    return Array.from(matches.values())
       .filter(match => match.status === 'completed')
       .sort((a, b) => (b.completedAt?.getTime() || 0) - (a.completedAt?.getTime() || 0));
   },
 
   async deleteMatch(matchId: string): Promise<void> {
-    globalMatches.delete(matchId);
+    matches.delete(matchId);
   }
 };
