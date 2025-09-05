@@ -68,13 +68,15 @@ export default function QuickMatchPage() {
         
         {searching || isPending ? (
           <div className="space-y-6">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="text-6xl"
-            >
-              🔍
-            </motion.div>
+            <div className="flex justify-center">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="text-6xl inline-block"
+              >
+                🔍
+              </motion.div>
+            </div>
             <p className="text-xl text-gray-300">{isPending ? 'Creating match...' : 'Searching for an opponent...'}</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
