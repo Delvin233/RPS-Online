@@ -185,53 +185,41 @@ export default function OnlineGame({ initialMatchId }: OnlineGameProps) {
 
   if (!match) {
     return (
-      <div className="flex flex-col items-center space-y-8 p-8">
-        <motion.h2 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="arcade-font text-2xl md:text-3xl text-primary text-center"
-        >
-          🌐 ONLINE MULTIPLAYER 🌐
-        </motion.h2>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+        <h2 className="arcade-font text-2xl text-primary text-center">
+          MULTIPLAYER
+        </h2>
 
-        <div className="flex flex-col md:flex-row gap-8 w-full max-w-2xl">
-          <div className="flex-1 space-y-4">
-            <h3 className="arcade-font text-lg text-accent text-center">CREATE MATCH</h3>
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={createMatch}
-              disabled={loading}
-              className="w-full arcade-button px-6 py-4 rounded-lg text-white arcade-font"
-            >
-              {loading ? 'CREATING...' : 'CREATE NEW MATCH'}
-            </motion.button>
-          </div>
+        <div className="bg-slate-800/50 rounded-lg p-6 w-full max-w-md space-y-4">
+          <button
+            onClick={createMatch}
+            disabled={loading}
+            className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors"
+          >
+            {loading ? 'Creating...' : 'Create Match'}
+          </button>
 
-          <div className="flex-1 space-y-4">
-            <h3 className="arcade-font text-lg text-accent text-center">JOIN MATCH</h3>
-            <input
-              type="text"
-              placeholder="Enter Match ID"
-              value={matchId}
-              onChange={(e) => setMatchId(e.target.value.toUpperCase())}
-              className="w-full px-4 py-3 bg-gray-800 border-2 border-blue-500 rounded-lg text-white arcade-font text-center"
-              maxLength={6}
-            />
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={joinMatch}
-              disabled={loading || !matchId.trim()}
-              className="w-full arcade-button px-6 py-4 rounded-lg text-white arcade-font"
-            >
-              {loading ? 'JOINING...' : 'JOIN MATCH'}
-            </motion.button>
-          </div>
+          <div className="text-center text-gray-400 text-sm">or</div>
+
+          <input
+            type="text"
+            placeholder="Match ID"
+            value={matchId}
+            onChange={(e) => setMatchId(e.target.value.toUpperCase())}
+            className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded text-white text-center"
+            maxLength={6}
+          />
+          <button
+            onClick={joinMatch}
+            disabled={loading || !matchId.trim()}
+            className="w-full px-4 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded transition-colors"
+          >
+            {loading ? 'Joining...' : 'Join Match'}
+          </button>
         </div>
 
         {error && (
-          <div className="text-red-400 arcade-font text-center">{error}</div>
+          <div className="text-red-400 text-sm text-center">{error}</div>
         )}
       </div>
     );

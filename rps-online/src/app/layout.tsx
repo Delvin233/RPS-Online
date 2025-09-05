@@ -14,8 +14,6 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-// Fallback to CSS import for Press Start 2P to avoid timeout issues
-
 export const metadata: Metadata = {
   title: "RPS Online - Arcade Rock Paper Scissors",
   description: "Arcade-style Rock Paper Scissors game",
@@ -32,8 +30,14 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <WalletProvider>
-          <Navbar />
-          {children}
+          <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
+            <Navbar />
+            <main className="flex items-center justify-center min-h-[calc(100vh-4rem)]">
+              <div className="w-full max-w-4xl mx-auto px-4">
+                {children}
+              </div>
+            </main>
+          </div>
         </WalletProvider>
       </body>
     </html>
